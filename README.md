@@ -1,6 +1,6 @@
 # Buy It or Leave It
 
-A mobile-first personal judgment app. The purchase workflow is one vertical in a broader personal judgment layer. Jev supplies nine narrow semantic signals; local code calculates cost per use, combines weights, checks budget, and suggests a direction. The person records the actual Buy it / Leave it outcome. History is kept in browser localStorage.
+A mobile-first personal judgment app. The purchase workflow is one vertical in a broader personal judgment layer. Jev supplies nine narrow semantic signals; local code calculates cost per use, combines weights, checks budget, and suggests a direction. The person records the actual Buy it / Leave it outcome. Decisions stay in memory only while the page is open; older locally saved decisions are erased when the updated page loads.
 
 ## Run locally
 
@@ -17,7 +17,7 @@ The server uses the [TypeSafe System One HTTP endpoint](https://docs.typesafe.ai
 
 Each Noul returns a probability of “yes,” not a guarantee. The app averages positively framed signals and the inverse of risk signals with explicit weights in `judgments.js`. A score of 42–58, an over-budget price, or missing affordability context leads to **Pause & decide**. The displayed score is a product rule over signals, not a probability that buying is correct. Cost per use uses the entered six-month expected uses. There is no hidden purchasing action.
 
-The nine questions live in `judgments.js`, so another decision vertical can define its own state, questions, and composition policy without changing the purchase UI. This MVP records outcomes locally; it does not retrain or calibrate Jev.
+The nine questions live in `judgments.js`, so another decision vertical can define its own state, questions, and composition policy without changing the purchase UI. This MVP tracks outcomes only for the current page session; it does not retrain or calibrate Jev. The site does not set cookies. Form autocomplete is disabled, though browsers may retain suggestions entered before this change until their form history is cleared in browser settings.
 
 ## Notes
 
