@@ -7,7 +7,10 @@ let current = null;
 const money = value => new Intl.NumberFormat(undefined,{style:'currency',currency:'EUR'}).format(value);
 const pct = value => `${Math.round(value * 100)}%`;
 const historyKey = 'buy-or-leave-history-v1';
-const getHistory = () => { try { return JSON.parse(localStorage.getItem(historyKey) || '[]'); } catch { return []; } };
+// Remove decisions saved by older versions. New decisions last only until this page closes.
+try { localStorage.removeItem(historyKey); } catch { /* Storage may be blocked. */ }
+let decisions = [];
+const getHistory = () => decisions;
 const setText = (selector, value) => { document.querySelector(selector).textContent = value; };
 function renderHistory() {
   const history = getHistory();
@@ -62,10 +65,10 @@ document.querySelectorAll('[data-choice]').forEach(button => button.addEventList
   const choice = button.dataset.choice;
   const history = getHistory();
   history.unshift({item:current.input.item,price:Number(current.input.price),choice,date:new Date().toISOString()});
-  localStorage.setItem(historyKey, JSON.stringify(history.slice(0, 50)));
+  decisions = history.slice(0, 50);
   document.querySelectorAll('[data-choice]').forEach(b => b.classList.toggle('selected', b === button));
   setText('#saved-choice', `${choice} saved to your decisions.`);
   renderHistory();
 }));
-document.querySelector('#clear-history').addEventListener('click', () => { localStorage.removeItem(historyKey); renderHistory(); });
+document.querySelector('#clear-history').addEventListener('click', () => { decisions = []; renderHistory(); });
 renderHistory();
